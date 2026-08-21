@@ -29,10 +29,77 @@ if "pendidikan" not in st.session_state:
 # ==========================================
 # 3. DICTIONARY MAPPING FONT
 # ==========================================
+# --- DIKSI & MAPPING FONT LENGKAP ---
 FONT_MAPPING = {
-    "Arial (Clean Sans)": {"css": "Arial, Helvetica, sans-serif", "pdf": "Helvetica"},
-    "Times New Roman (Serif)": {"css": "'Times New Roman', Times, serif", "pdf": "Times-Roman"},
-    "Courier (Monospace)": {"css": "'Courier New', Courier, monospace", "pdf": "Courier"}
+    # --- SANS-SERIF (Sangat Cocok untuk CV Modern / ATS) ---
+    "Arial (Modern Clean)": {
+        "css": "Arial, Helvetica, sans-serif",
+        "pdf": "Arial"
+    },
+    "Calibri (Corporate Standard)": {
+        "css": "Calibri, Candara, Segoe, 'Segoe UI', Optima, sans-serif",
+        "pdf": "Calibri"
+    },
+    "Helvetica (Swiss Minimalist)": {
+        "css": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "pdf": "Helvetica"
+    },
+    "Trebuchet MS (Fresh & Dynamic)": {
+        "css": "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif",
+        "pdf": "Trebuchet MS"
+    },
+    "Verdana (Legible & Clear)": {
+        "css": "Verdana, Geneva, sans-serif",
+        "pdf": "Verdana"
+    },
+    "Inter / Segoe UI (Modern Digital)": {
+        "css": "'Inter', 'Segoe UI', Roboto, Helvetica, sans-serif",
+        "pdf": "sans-serif"
+    },
+    "Roboto (Clean Neutral)": {
+        "css": "'Roboto', 'Helvetica Neue', Arial, sans-serif",
+        "pdf": "sans-serif"
+    },
+    "Montserrat (Bold Modern)": {
+        "css": "'Montserrat', 'Arial Black', sans-serif",
+        "pdf": "sans-serif"
+    },
+    "Poppins (Geometric & Friendly)": {
+        "css": "'Poppins', 'Segoe UI', sans-serif",
+        "pdf": "sans-serif"
+    },
+
+    # --- SERIF (Sangat Cocok untuk CV Executive / Classic) ---
+    "Georgia (Executive Serif)": {
+        "css": "Georgia, 'Times New Roman', serif",
+        "pdf": "Georgia"
+    },
+    "Garamond (Classic Elegant)": {
+        "css": "Garamond, Baskerville, 'Times New Roman', serif",
+        "pdf": "Garamond"
+    },
+    "Times New Roman (Traditional ATS)": {
+        "css": "'Times New Roman', Times, serif",
+        "pdf": "Times New Roman"
+    },
+    "Palatino (Editorial Elegance)": {
+        "css": "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
+        "pdf": "Palatino"
+    },
+    "Lora (Contemporary Serif)": {
+        "css": "'Lora', Georgia, serif",
+        "pdf": "serif"
+    },
+
+    # --- MONOSPACE (Sangat Cocok untuk CV Tech / Developer) ---
+    "Courier New (Tech Monospace)": {
+        "css": "'Courier New', Courier, monospace",
+        "pdf": "Courier"
+    },
+    "Consolas (Code Style)": {
+        "css": "Consolas, 'Liberation Mono', Menlo, Monaco, monospace",
+        "pdf": "monospace"
+    }
 }
 
 # ==========================================
