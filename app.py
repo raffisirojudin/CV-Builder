@@ -365,6 +365,100 @@ MINIMAL_HTML = """
 </html>
 """
 
+# --- TEMPLATE 5: ELEGANT CLASSIC ---
+ELEGANT_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: a4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #222222 !important; 
+        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.3;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .header-box {
+        border: 1.5pt solid {{ accent_color }};
+        padding: 10pt 12pt;
+        margin-bottom: 12pt;
+        background-color: #fcfcfc;
+    }
+    .header-table { width: 100%; border-collapse: collapse; }
+    .profile-img-elegant {
+        width: 80px; height: 80px; border-radius: 50%;
+        border: 2pt solid {{ accent_color }}; object-fit: cover;
+    }
+    .name { font-size: 20pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; letter-spacing: 1pt; }
+    .title { font-size: 10pt; font-weight: 600; color: #555555; text-transform: uppercase; margin-top: 2pt; }
+    .contact { font-size: 8.5pt; color: #444444; margin-top: 5pt; line-height: 1.4; }
+    
+    .section-title { 
+        font-size: 10.5pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; 
+        border-bottom: 1.5pt solid {{ accent_color }}; margin-top: 11pt; margin-bottom: 6pt; padding-bottom: 2pt;
+        letter-spacing: 0.5pt;
+    }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #111111; margin-top: 4pt; }
+    .item-sub { font-weight: 600; font-size: 8.5pt; color: #555555; font-style: italic; }
+    .right-text { float: right; color: #666666; font-weight: normal; font-style: normal; }
+    .desc { margin-top: 3pt; margin-bottom: 6pt; white-space: pre-line; color: #333333; font-size: 8.5pt; }
+</style>
+</head>
+<body>
+    <div class="header-box">
+        <table class="header-table">
+            <tr>
+                {% if foto_base64 %}
+                <td width="18%" valign="middle" align="center">
+                    <img src="{{ foto_base64 }}" class="profile-img-elegant" />
+                </td>
+                {% endif %}
+                <td valign="middle">
+                    <div class="name">{{ nama }}</div>
+                    {% if posisi_target %}<div class="title">{{ posisi_target }}</div>{% endif %}
+                    <div class="contact">
+                        📍 {{ lokasi }} &nbsp;•&nbsp; ✉️ {{ email }} &nbsp;•&nbsp; 📞 {{ telepon }}
+                        {% if linkedin %}<br>🔗 {{ linkedin }}{% endif %} {% if github_portfolio %}&nbsp;•&nbsp; 💻 {{ github_portfolio }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {% if ringkasan %}
+    <div class="section-title">PROFIL PROFESIONAL</div>
+    <div class="desc">{{ ringkasan }}</div>
+    {% endif %}
+
+    {% if pengalaman and pengalaman[0].perusahaan %}
+    <div class="section-title">PENGALAMAN KERJA</div>
+    {% for exp in pengalaman %}{% if exp.perusahaan %}
+        <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
+        <div class="item-sub">{{ exp.perusahaan }}</div>
+        <div class="desc">{{ exp.deskripsi }}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if pendidikan and pendidikan[0].institusi %}
+    <div class="section-title">PENDIDIKAN</div>
+    {% for edu in pendidikan %}{% if edu.institusi %}
+        <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if hard_skills or soft_skills or bahasa %}
+    <div class="section-title">KEAHLIAN & BAHASA</div>
+    <div class="desc">
+        {% if hard_skills %}<b>Technical Skills:</b> {{ hard_skills }}<br>{% endif %}
+        {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
+        {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
+"""
+
 # ==========================================
 # 5. FUNGSI GENERATE PDF
 # ==========================================
@@ -382,9 +476,9 @@ st.title("📄 AI & Dynamic CV Builder")
 
 with st.sidebar:
     st.header("🎨 Pengaturan Template")
-    selected_template = st.selectbox(
+   selected_template = st.selectbox(
         "Pilih Gaya CV", 
-        ["ATS Clean (ATS-Friendly)", "Modern Executive", "Creative Two-Column", "Minimalist Compact"]
+        ["ATS Clean (ATS-Friendly)", "Modern Executive", "Creative Two-Column", "Minimalist Compact", "Elegant Classic"]
     )
     
     font_label = st.selectbox("Font Family", list(FONT_MAPPING.keys()))
@@ -459,6 +553,8 @@ with tab_preview:
         raw_template = MODERN_HTML
     elif "Creative" in selected_template:
         raw_template = CREATIVE_HTML
+    elif "Elegant" in selected_template:
+        raw_template = ELEGANT_HTML
     else:
         raw_template = MINIMAL_HTML
     
