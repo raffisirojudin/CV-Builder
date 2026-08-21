@@ -27,35 +27,46 @@ if "organisasi" not in st.session_state:
 # 2. TEMPLATE HTML & CSS (JINJA2)
 # ==========================================
 
-# TEMPLATE 1: ATS CLEAN
+# TEMPLATE 1: ATS CLEAN (FIXED DARK MODE)
 ATS_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 1.2cm; }
-    body { font-family: {{ font_family }}, sans-serif; font-size: 9.5pt; color: #111111; line-height: 1.35; }
+    @page { size: A4; margin: 0; }
+    html { background-color: #1e1e1e; padding: 20px; } /* Background luar iframe */
+    body { 
+        background-color: #ffffff !important; /* Paksa latar belakang putih */
+        color: #111111 !important; /* Warna teks gelap tegas */
+        font-family: {{ font_family }}, sans-serif; 
+        font-size: 9.5pt; 
+        line-height: 1.35;
+        max-width: 750px;
+        margin: 0 auto;
+        padding: 40px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Efek kertas A4 */
+        border-radius: 2px;
+    }
     .header { text-align: center; margin-bottom: 12px; }
-    .name { font-size: 18pt; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .name { font-size: 18pt; font-weight: bold; text-transform: uppercase; color: #000000; }
     .title { font-size: 11pt; font-weight: bold; color: #333333; margin-top: 2px; }
     .contact { font-size: 9pt; color: #444444; margin-top: 4px; }
     
     .section-title { 
         font-size: 10.5pt; 
         font-weight: bold; 
+        color: #000000;
         text-transform: uppercase; 
-        border-bottom: 1px solid #111111; 
-        margin-top: 10px; 
-        margin-bottom: 5px; 
-        padding-bottom: 1px;
+        border-bottom: 1.5px solid #111111; 
+        margin-top: 14px; 
+        margin-bottom: 6px; 
+        padding-bottom: 2px;
     }
     
-    .item-header { font-weight: bold; font-size: 9.5pt; }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #000000; }
     .item-sub { font-style: italic; font-size: 9pt; color: #333333; }
-    .right-text { float: right; font-weight: normal; font-style: normal; }
-    .desc { margin-top: 3px; margin-bottom: 6px; white-space: pre-line; }
-    .skills-table { width: 100%; border-collapse: collapse; }
-    .skills-table td { vertical-align: top; padding: 2px 0; }
+    .right-text { float: right; font-weight: normal; font-style: normal; color: #444444; }
+    .desc { margin-top: 3px; margin-bottom: 8px; white-space: pre-line; color: #222222; }
 </style>
 </head>
 <body>
@@ -104,56 +115,42 @@ ATS_HTML = """
     {% endfor %}
     {% endif %}
 
-    {% if proyek and proyek[0].nama %}
-    <div class="section-title">PROYEK TERKAIT</div>
-    {% for proj in proyek %}
-        {% if proj.nama %}
-        <div class="item-header">
-            {{ proj.nama }} {% if proj.peran %}- <i>{{ proj.peran }}</i>{% endif %}
-            {% if proj.link %}<span class="right-text">{{ proj.link }}</span>{% endif %}
-        </div>
-        {% if proj.tools %}<div class="item-sub">Tools: {{ proj.tools }}</div>{% endif %}
-        <div class="desc">{{ proj.deskripsi }}</div>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
-
-    {% if sertifikasi and sertifikasi[0].nama %}
-    <div class="section-title">SERTIFIKASI</div>
-    {% for cert in sertifikasi %}
-        {% if cert.nama %}
-        <div class="item-header">
-            {{ cert.nama }} - <span style="font-weight:normal;">{{ cert.penerbit }}</span>
-            <span class="right-text">{{ cert.tahun }}</span>
-        </div>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
-
     {% if hard_skills or soft_skills or bahasa %}
     <div class="section-title">KEAHLIAN & LAINNYA</div>
-    <table class="skills-table">
-        {% if hard_skills %}<tr><td width="20%"><b>Hard Skills:</b></td><td>{{ hard_skills }}</td></tr>{% endif %}
-        {% if soft_skills %}<tr><td width="20%"><b>Soft Skills:</b></td><td>{{ soft_skills }}</td></tr>{% endif %}
-        {% if bahasa %}<tr><td width="20%"><b>Bahasa:</b></td><td>{{ bahasa }}</td></tr>{% endif %}
-    </table>
+    <p style="margin-top: 3px; color: #222222;">
+        {% if hard_skills %}<b>Hard Skills:</b> {{ hard_skills }}<br>{% endif %}
+        {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
+        {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
+    </p>
     {% endif %}
 </body>
 </html>
 """
 
-# TEMPLATE 2: MODERN EXECUTIVE
+# TEMPLATE 2: MODERN EXECUTIVE (FIXED DARK MODE)
 MODERN_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 1.2cm; }
-    body { font-family: {{ font_family }}, sans-serif; font-size: 9.5pt; color: #2D3748; line-height: 1.4; }
+    @page { size: A4; margin: 0; }
+    html { background-color: #1e1e1e; padding: 20px; }
+    body { 
+        background-color: #ffffff !important; 
+        color: #2d3748 !important; 
+        font-family: {{ font_family }}, sans-serif; 
+        font-size: 9.5pt; 
+        line-height: 1.4;
+        max-width: 750px;
+        margin: 0 auto;
+        padding: 40px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        border-radius: 2px;
+    }
     
-    .top-bar { border-top: 4px solid {{ accent_color }}; padding-top: 10px; margin-bottom: 15px; }
+    .top-bar { border-top: 5px solid {{ accent_color }}; padding-top: 12px; margin-bottom: 15px; }
     .name { font-size: 20pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; }
-    .title { font-size: 11pt; font-weight: bold; color: #4A5568; margin-top: 2px; }
+    .title { font-size: 11pt; font-weight: bold; color: #4a5568; margin-top: 2px; }
     .contact { font-size: 8.5pt; color: #718096; margin-top: 6px; }
     
     .section-title { 
@@ -162,17 +159,17 @@ MODERN_HTML = """
         color: {{ accent_color }}; 
         text-transform: uppercase; 
         border-bottom: 2px solid {{ accent_color }}; 
-        margin-top: 12px; 
-        margin-bottom: 6px; 
+        margin-top: 14px; 
+        margin-bottom: 8px; 
         letter-spacing: 0.5px;
     }
     
-    .item-header { font-weight: bold; font-size: 9.5pt; color: #1A202C; }
-    .item-sub { font-weight: 600; font-size: 9pt; color: #4A5568; }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #1a202c; }
+    .item-sub { font-weight: 600; font-size: 9pt; color: #4a5568; }
     .right-text { float: right; color: #718096; font-weight: normal; }
-    .desc { margin-top: 3px; margin-bottom: 8px; white-space: pre-line; color: #2D3748; }
+    .desc { margin-top: 3px; margin-bottom: 8px; white-space: pre-line; color: #2d3748; }
     
-    .badge { background-color: #EDF2F7; padding: 2px 6px; font-size: 8.5pt; border-radius: 3px; color: #2B6CB0; }
+    .badge { background-color: #edf2f7; padding: 2px 6px; font-size: 8.5pt; border-radius: 3px; color: #2b6cb0; }
 </style>
 </head>
 <body>
@@ -218,35 +215,9 @@ MODERN_HTML = """
     {% endfor %}
     {% endif %}
 
-    {% if proyek and proyek[0].nama %}
-    <div class="section-title">PROYEK & PORTOFOLIO</div>
-    {% for proj in proyek %}
-        {% if proj.nama %}
-        <div class="item-header">
-            {{ proj.nama }} {% if proj.peran %}<span class="badge">{{ proj.peran }}</span>{% endif %}
-            {% if proj.link %}<span class="right-text">{{ proj.link }}</span>{% endif %}
-        </div>
-        {% if proj.tools %}<div class="item-sub" style="font-size:8.5pt; color:#718096;">Stack: {{ proj.tools }}</div>{% endif %}
-        <div class="desc">{{ proj.deskripsi }}</div>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
-
-    {% if sertifikasi and sertifikasi[0].nama %}
-    <div class="section-title">SERTIFIKASI PROFESIONAL</div>
-    {% for cert in sertifikasi %}
-        {% if cert.nama %}
-        <div class="item-header">
-            🏆 {{ cert.nama }} - <span style="font-weight:normal; color:#4A5568;">{{ cert.penerbit }}</span>
-            <span class="right-text">{{ cert.tahun }}</span>
-        </div>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
-
     {% if hard_skills or soft_skills or bahasa %}
     <div class="section-title">KEAHLIAN & BAHASA</div>
-    <p style="margin-top: 3px;">
+    <p style="margin-top: 3px; color: #2d3748;">
         {% if hard_skills %}<b>Hard Skills:</b> {{ hard_skills }}<br>{% endif %}
         {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
         {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
