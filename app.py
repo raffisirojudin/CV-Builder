@@ -476,7 +476,7 @@ st.title("📄 AI & Dynamic CV Builder")
 
 with st.sidebar:
     st.header("🎨 Pengaturan Template")
-   selected_template = st.selectbox(
+    selected_template = st.selectbox(
         "Pilih Gaya CV", 
         ["ATS Clean (ATS-Friendly)", "Modern Executive", "Creative Two-Column", "Minimalist Compact", "Elegant Classic"]
     )
