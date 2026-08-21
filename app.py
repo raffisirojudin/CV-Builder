@@ -34,7 +34,7 @@ FONT_MAPPING = {
 }
 
 # ==========================================
-# 3. TEMPLATES HTML & CSS
+# 3. TEMPLATES HTML & CSS (PRESISI A4)
 # ==========================================
 
 # --- TEMPLATE 1: ATS CLEAN ---
@@ -43,26 +43,27 @@ ATS_HTML = """
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 0; }
-    html { background-color: #1e1e1e; padding: 20px; }
+    @page { size: a4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
     body { 
         background-color: #ffffff !important; color: #111111 !important; 
-        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.35;
-        max-width: 750px; margin: 0 auto; padding: 40px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border-radius: 2px;
+        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.25;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    .header { text-align: center; margin-bottom: 12px; }
-    .name { font-size: 18pt; font-weight: bold; text-transform: uppercase; color: #000000; }
-    .title { font-size: 11pt; font-weight: bold; color: #333333; margin-top: 2px; }
-    .contact { font-size: 9pt; color: #444444; margin-top: 4px; }
+    .header { text-align: center; margin-bottom: 10pt; }
+    .name { font-size: 18pt; font-weight: bold; text-transform: uppercase; color: #000000; line-height: 1.1; }
+    .title { font-size: 10.5pt; font-weight: bold; color: #333333; margin-top: 3pt; }
+    .contact { font-size: 8.5pt; color: #444444; margin-top: 4pt; }
     .section-title { 
-        font-size: 10.5pt; font-weight: bold; color: #000000; text-transform: uppercase; 
-        border-bottom: 1.5px solid #111111; margin-top: 14px; margin-bottom: 6px; padding-bottom: 2px;
+        font-size: 10pt; font-weight: bold; color: #000000; text-transform: uppercase; 
+        border-bottom: 1.5pt solid #111111; margin-top: 10pt; margin-bottom: 5pt; padding-bottom: 2pt;
     }
-    .item-header { font-weight: bold; font-size: 9.5pt; color: #000000; }
-    .item-sub { font-style: italic; font-size: 9pt; color: #333333; }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #000000; margin-top: 4pt; }
+    .item-sub { font-style: italic; font-size: 8.5pt; color: #333333; }
     .right-text { float: right; font-weight: normal; font-style: normal; color: #444444; }
-    .desc { margin-top: 3px; margin-bottom: 8px; white-space: pre-line; color: #222222; }
+    .desc { margin-top: 2pt; margin-bottom: 4pt; white-space: pre-line; color: #222222; font-size: 9pt; }
 </style>
 </head>
 <body>
@@ -87,15 +88,15 @@ ATS_HTML = """
     <div class="section-title">PENDIDIKAN</div>
     {% for edu in pendidikan %}{% if edu.institusi %}
         <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
-        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div><br>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
     {% endif %}{% endfor %}{% endif %}
     {% if hard_skills or soft_skills or bahasa %}
     <div class="section-title">KEAHLIAN & LAINNYA</div>
-    <p style="margin-top: 3px; color: #222222;">
+    <div class="desc">
         {% if hard_skills %}<b>Hard Skills:</b> {{ hard_skills }}<br>{% endif %}
         {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
         {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
-    </p>
+    </div>
     {% endif %}
 </body>
 </html>
@@ -107,26 +108,27 @@ MODERN_HTML = """
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 0; }
-    html { background-color: #1e1e1e; padding: 20px; }
+    @page { size: a4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
     body { 
         background-color: #ffffff !important; color: #2d3748 !important; 
-        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.4;
-        max-width: 750px; margin: 0 auto; padding: 40px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border-radius: 2px;
+        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.3;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    .top-bar { border-top: 5px solid {{ accent_color }}; padding-top: 12px; margin-bottom: 15px; }
-    .name { font-size: 20pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; }
-    .title { font-size: 11pt; font-weight: bold; color: #4a5568; margin-top: 2px; }
-    .contact { font-size: 8.5pt; color: #718096; margin-top: 6px; }
+    .top-bar { border-top: 4pt solid {{ accent_color }}; padding-top: 8pt; margin-bottom: 10pt; }
+    .name { font-size: 19pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; line-height: 1.1; }
+    .title { font-size: 10.5pt; font-weight: bold; color: #4a5568; margin-top: 2pt; }
+    .contact { font-size: 8.5pt; color: #718096; margin-top: 4pt; }
     .section-title { 
         font-size: 10pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; 
-        border-bottom: 2px solid {{ accent_color }}; margin-top: 14px; margin-bottom: 8px; letter-spacing: 0.5px;
+        border-bottom: 1.5pt solid {{ accent_color }}; margin-top: 10pt; margin-bottom: 6pt; padding-bottom: 2pt;
     }
-    .item-header { font-weight: bold; font-size: 9.5pt; color: #1a202c; }
-    .item-sub { font-weight: 600; font-size: 9pt; color: #4a5568; }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #1a202c; margin-top: 4pt; }
+    .item-sub { font-weight: 600; font-size: 8.5pt; color: #4a5568; }
     .right-text { float: right; color: #718096; font-weight: normal; }
-    .desc { margin-top: 3px; margin-bottom: 8px; white-space: pre-line; color: #2d3748; }
+    .desc { margin-top: 2pt; margin-bottom: 5pt; white-space: pre-line; color: #2d3748; font-size: 8.5pt; }
 </style>
 </head>
 <body>
@@ -150,49 +152,51 @@ MODERN_HTML = """
     <div class="section-title">PENDIDIKAN</div>
     {% for edu in pendidikan %}{% if edu.institusi %}
         <div class="item-header">{{ edu.institusi }} <span class="right-text">📅 {{ edu.tahun }}</span></div>
-        <div class="item-sub">🎓 {{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div><br>
+        <div class="item-sub">🎓 {{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
     {% endif %}{% endfor %}{% endif %}
 </body>
 </html>
 """
 
-# --- TEMPLATE 3: CREATIVE TWO-COLUMN (NEW) ---
+# --- TEMPLATE 3: CREATIVE TWO-COLUMN (DIPERBAIKI PADAT) ---
 CREATIVE_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 0; }
-    html { background-color: #1e1e1e; padding: 20px; }
+    @page { size: a4 portrait; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
     body { 
         background-color: #ffffff !important; color: #2d3748 !important; 
-        font-family: {{ font_family }}; font-size: 9pt; line-height: 1.4;
-        max-width: 800px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        font-family: {{ font_family }}; font-size: 8.5pt; line-height: 1.25;
+        width: 210mm; min-height: 297mm; margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
     .cv-table { width: 100%; border-collapse: collapse; }
     .left-col { 
         background-color: #2D3748 !important; color: #FFFFFF !important; 
-        padding: 30px 20px; vertical-align: top;
+        padding: 10mm 7mm; vertical-align: top;
     }
-    .right-col { background-color: #FFFFFF !important; padding: 30px 25px; vertical-align: top; }
+    .right-col { background-color: #FFFFFF !important; padding: 10mm 9mm; vertical-align: top; }
     
-    .sidebar-title { font-size: 16pt; font-weight: bold; color: #FFFFFF; text-transform: uppercase; margin-bottom: 2px; }
-    .sidebar-sub { font-size: 9.5pt; color: #CBD5E0; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-    .sidebar-sec { font-size: 10pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; border-bottom: 1px solid #4A5568; margin-top: 20px; margin-bottom: 8px; padding-bottom: 2px; }
-    .sidebar-text { font-size: 8.5pt; color: #E2E8F0; margin-bottom: 5px; word-break: break-all; }
+    .sidebar-title { font-size: 15pt; font-weight: bold; color: #FFFFFF; text-transform: uppercase; line-height: 1.1; }
+    .sidebar-sub { font-size: 8.5pt; color: #CBD5E0; margin-bottom: 12pt; text-transform: uppercase; letter-spacing: 0.5pt; margin-top: 2pt; }
+    .sidebar-sec { font-size: 9pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; border-bottom: 1pt solid #4A5568; margin-top: 12pt; margin-bottom: 5pt; padding-bottom: 1pt; }
+    .sidebar-text { font-size: 8pt; color: #E2E8F0; margin-bottom: 3pt; word-break: break-all; }
     
-    .main-sec { font-size: 11pt; font-weight: bold; color: #1A202C; text-transform: uppercase; border-bottom: 2px solid {{ accent_color }}; margin-top: 15px; margin-bottom: 10px; padding-bottom: 2px; }
-    .item-header { font-weight: bold; font-size: 9.5pt; color: #1A202C; }
-    .item-sub { font-size: 8.5pt; color: #4A5568; font-style: italic; margin-bottom: 4px; }
-    .right-text { float: right; color: #718096; font-weight: normal; font-size: 8.5pt; }
-    .desc { margin-top: 3px; margin-bottom: 10px; white-space: pre-line; color: #2D3748; font-size: 8.5pt; }
+    .main-sec { font-size: 10pt; font-weight: bold; color: #1A202C; text-transform: uppercase; border-bottom: 1.5pt solid {{ accent_color }}; margin-top: 10pt; margin-bottom: 6pt; padding-bottom: 1pt; }
+    .item-header { font-weight: bold; font-size: 9pt; color: #1A202C; margin-top: 3pt; }
+    .item-sub { font-size: 8pt; color: #4A5568; font-style: italic; margin-bottom: 2pt; }
+    .right-text { float: right; color: #718096; font-weight: normal; font-size: 8pt; }
+    .desc { margin-top: 2pt; margin-bottom: 6pt; white-space: pre-line; color: #2D3748; font-size: 8.5pt; }
 </style>
 </head>
 <body>
     <table class="cv-table">
         <tr>
             <!-- LEFT SIDEBAR -->
-            <td class="left-col" width="33%">
+            <td class="left-col" width="32%" valign="top">
                 <div class="sidebar-title">{{ nama }}</div>
                 <div class="sidebar-sub">{{ posisi_target }}</div>
                 
@@ -220,14 +224,14 @@ CREATIVE_HTML = """
             </td>
 
             <!-- RIGHT MAIN CONTENT -->
-            <td class="right-col" width="67%">
+            <td class="right-col" width="68%" valign="top">
                 {% if ringkasan %}
-                <div class="main-sec" style="border-color: {{ accent_color }};">TENTANG SAYA</div>
+                <div class="main-sec">TENTANG SAYA</div>
                 <div class="desc">{{ ringkasan }}</div>
                 {% endif %}
 
                 {% if pengalaman and pengalaman[0].perusahaan %}
-                <div class="main-sec" style="border-color: {{ accent_color }};">PENGALAMAN KERJA</div>
+                <div class="main-sec">PENGALAMAN KERJA</div>
                 {% for exp in pengalaman %}{% if exp.perusahaan %}
                     <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
                     <div class="item-sub">{{ exp.perusahaan }}</div>
@@ -235,7 +239,7 @@ CREATIVE_HTML = """
                 {% endif %}{% endfor %}{% endif %}
 
                 {% if pendidikan and pendidikan[0].institusi %}
-                <div class="main-sec" style="border-color: {{ accent_color }};">PENDIDIKAN</div>
+                <div class="main-sec">PENDIDIKAN</div>
                 {% for edu in pendidikan %}{% if edu.institusi %}
                     <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
                     <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
@@ -247,30 +251,31 @@ CREATIVE_HTML = """
 </html>
 """
 
-# --- TEMPLATE 4: MINIMALIST COMPACT (NEW) ---
+# --- TEMPLATE 4: MINIMALIST COMPACT ---
 MINIMAL_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-    @page { size: A4; margin: 0; }
-    html { background-color: #1e1e1e; padding: 20px; }
+    @page { size: a4 portrait; margin: 10mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
     body { 
         background-color: #ffffff !important; color: #1a1a1a !important; 
-        font-family: {{ font_family }}; font-size: 9pt; line-height: 1.3;
-        max-width: 750px; margin: 0 auto; padding: 35px;
+        font-family: {{ font_family }}; font-size: 8.5pt; line-height: 1.25;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 10mm;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    .header-table { width: 100%; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 12px; }
-    .name { font-size: 22pt; font-weight: 300; letter-spacing: -0.5px; color: #111111; }
-    .title { font-size: 10pt; color: {{ accent_color }}; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-    .contact-right { text-align: right; font-size: 8pt; color: #666666; line-height: 1.4; }
+    .header-table { width: 100%; border-bottom: 1pt solid #e0e0e0; padding-bottom: 8pt; margin-bottom: 8pt; }
+    .name { font-size: 20pt; font-weight: 300; letter-spacing: -0.5pt; color: #111111; line-height: 1; }
+    .title { font-size: 9.5pt; color: {{ accent_color }}; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5pt; margin-top: 2pt; }
+    .contact-right { text-align: right; font-size: 8pt; color: #666666; line-height: 1.3; }
     
-    .sec-head { font-size: 9.5pt; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; color: #888888; margin-top: 14px; margin-bottom: 6px; }
-    .item-header { font-weight: bold; font-size: 9pt; color: #111111; }
+    .sec-head { font-size: 9pt; font-weight: bold; letter-spacing: 1pt; text-transform: uppercase; color: #777777; margin-top: 9pt; margin-bottom: 4pt; }
+    .item-header { font-weight: bold; font-size: 8.5pt; color: #111111; margin-top: 2pt; }
     .right-text { float: right; color: #888888; font-weight: normal; }
-    .item-sub { font-size: 8.5pt; color: #555555; }
-    .desc { margin-top: 2px; margin-bottom: 8px; color: #333333; white-space: pre-line; }
+    .item-sub { font-size: 8pt; color: #555555; }
+    .desc { margin-top: 2pt; margin-bottom: 5pt; color: #333333; white-space: pre-line; }
 </style>
 </head>
 <body>
@@ -305,7 +310,7 @@ MINIMAL_HTML = """
     <div class="sec-head">PENDIDIKAN</div>
     {% for edu in pendidikan %}{% if edu.institusi %}
         <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
-        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div><br>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
     {% endif %}{% endfor %}{% endif %}
 
     {% if hard_skills or soft_skills %}
@@ -403,7 +408,6 @@ with tab_input:
 
 # --- TAB 2: LIVE PREVIEW & DOWNLOAD ---
 with tab_preview:
-    # Router Selection Template
     if "ATS" in selected_template:
         raw_template = ATS_HTML
     elif "Modern" in selected_template:
@@ -436,8 +440,8 @@ with tab_preview:
     col_preview, col_download = st.columns([3, 1])
 
     with col_preview:
-        st.subheader("Visual Preview")
-        st.components.v1.html(rendered_html_preview, height=800, scrolling=True)
+        st.subheader("Visual Preview (Presisi A4)")
+        st.components.v1.html(rendered_html_preview, height=850, scrolling=True)
 
     with col_download:
         st.subheader("📥 Export File")
