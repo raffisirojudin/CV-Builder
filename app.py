@@ -365,6 +365,505 @@ MINIMAL_HTML = """
 </html>
 """
 
+# --- TEMPLATE 6: CORPORATE PROFESSIONAL ---
+CORPORATE_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: A4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #1e293b !important; 
+        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.4;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .header-bar {
+        background-color: {{ accent_color }};
+        color: #ffffff;
+        padding: 16pt 16pt;
+        border-radius: 4px;
+        margin-bottom: 14pt;
+    }
+    .header-table { width: 100%; border-collapse: collapse; }
+    .profile-img {
+        width: 85px; height: 85px; border-radius: 50%;
+        border: 3pt solid #ffffff; object-fit: cover;
+    }
+    .name { font-size: 22pt; font-weight: bold; color: #ffffff; letter-spacing: 0.5pt; }
+    .title { font-size: 11pt; color: #e2e8f0; font-weight: 500; margin-top: 2pt; text-transform: uppercase; }
+    .contact-bar { font-size: 8.5pt; color: #f1f5f9; margin-top: 6pt; line-height: 1.4; }
+    
+    .section-title { 
+        font-size: 11pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; 
+        border-left: 4px solid {{ accent_color }}; padding-left: 8pt; margin-top: 12pt; margin-bottom: 8pt;
+        letter-spacing: 0.5pt; background-color: #f8fafc; padding-top: 3pt; padding-bottom: 3pt;
+    }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #0f172a; margin-top: 4pt; }
+    .item-sub { font-weight: 600; font-size: 8.5pt; color: {{ accent_color }}; }
+    .right-text { float: right; color: #64748b; font-weight: normal; }
+    .desc { margin-top: 3pt; margin-bottom: 6pt; white-space: pre-line; color: #334155; font-size: 8.5pt; }
+    .skills-box { background: #f1f5f9; padding: 8pt 10pt; border-radius: 4px; margin-top: 4pt; }
+</style>
+</head>
+<body>
+    <div class="header-bar">
+        <table class="header-table">
+            <tr>
+                {% if foto_base64 %}
+                <td width="20%" valign="middle" align="center">
+                    <img src="{{ foto_base64 }}" class="profile-img" />
+                </td>
+                {% endif %}
+                <td valign="middle">
+                    <div class="name">{{ nama }}</div>
+                    {% if posisi_target %}<div class="title">{{ posisi_target }}</div>{% endif %}
+                    <div class="contact-bar">
+                        📍 {{ lokasi }} &nbsp;•&nbsp; ✉️ {{ email }} &nbsp;•&nbsp; 📞 {{ telepon }}
+                        {% if linkedin %}<br>🔗 {{ linkedin }}{% endif %} {% if github_portfolio %}&nbsp;•&nbsp; 💻 {{ github_portfolio }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {% if ringkasan %}
+    <div class="section-title">PROFIL PROFESIONAL</div>
+    <div class="desc">{{ ringkasan }}</div>
+    {% endif %}
+
+    {% if pengalaman and pengalaman[0].perusahaan %}
+    <div class="section-title">PENGALAMAN KERJA</div>
+    {% for exp in pengalaman %}{% if exp.perusahaan %}
+        <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
+        <div class="item-sub">{{ exp.perusahaan }}</div>
+        <div class="desc">{{ exp.deskripsi }}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if pendidikan and pendidikan[0].institusi %}
+    <div class="section-title">PENDIDIKAN</div>
+    {% for edu in pendidikan %}{% if edu.institusi %}
+        <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if hard_skills or soft_skills or bahasa %}
+    <div class="section-title">KEAHLIAN & BAHASA</div>
+    <div class="skills-box desc">
+        {% if hard_skills %}<b>Technical Skills:</b> {{ hard_skills }}<br>{% endif %}
+        {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
+        {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
+"""
+
+# --- TEMPLATE 7: CREATIVE SPLIT SIDEBAR ---
+CREATIVE_SPLIT_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: A4 portrait; margin: 0mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #1e293b !important; 
+        font-family: {{ font_family }}; font-size: 9pt; line-height: 1.35;
+        width: 210mm; min-height: 297mm; margin: 0 auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .main-table { width: 100%; border-collapse: collapse; min-height: 297mm; }
+    .left-col {
+        width: 32%; background-color: #0f172a; color: #f8fafc;
+        padding: 15mm 10mm; valign: top; vertical-align: top;
+    }
+    .right-col {
+        width: 68%; background-color: #ffffff; color: #1e293b;
+        padding: 15mm 12mm; valign: top; vertical-align: top;
+    }
+    .profile-img-split {
+        width: 100px; height: 100px; border-radius: 50%;
+        border: 3pt solid {{ accent_color }}; object-fit: cover; margin-bottom: 12pt;
+    }
+    .sidebar-title {
+        font-size: 10pt; font-weight: bold; color: {{ accent_color }};
+        border-bottom: 1pt solid {{ accent_color }}; padding-bottom: 3pt;
+        margin-top: 14pt; margin-bottom: 8pt; text-transform: uppercase; letter-spacing: 0.5pt;
+    }
+    .sidebar-text { font-size: 8.5pt; color: #cbd5e1; line-height: 1.5; word-wrap: break-word; }
+    
+    .name-main { font-size: 22pt; font-weight: bold; color: {{ accent_color }}; text-transform: uppercase; }
+    .title-main { font-size: 11pt; font-weight: 600; color: #475569; text-transform: uppercase; margin-bottom: 12pt; }
+    
+    .section-title-main {
+        font-size: 10.5pt; font-weight: bold; color: #0f172a;
+        border-bottom: 2pt solid {{ accent_color }}; padding-bottom: 2pt;
+        margin-top: 12pt; margin-bottom: 8pt; text-transform: uppercase;
+    }
+    .item-header { font-weight: bold; font-size: 9.5pt; color: #0f172a; margin-top: 4pt; }
+    .item-sub { font-weight: 600; font-size: 8.5pt; color: {{ accent_color }}; }
+    .right-text { float: right; color: #64748b; font-weight: normal; }
+    .desc { margin-top: 3pt; margin-bottom: 6pt; white-space: pre-line; color: #334155; font-size: 8.5pt; }
+</style>
+</head>
+<body>
+    <table class="main-table">
+        <tr>
+            <td class="left-col">
+                {% if foto_base64 %}
+                <div align="center">
+                    <img src="{{ foto_base64 }}" class="profile-img-split" />
+                </div>
+                {% endif %}
+                
+                <div class="sidebar-title">KONTAK</div>
+                <div class="sidebar-text">
+                    📍 {{ lokasi }}<br>
+                    ✉️ {{ email }}<br>
+                    📞 {{ telepon }}
+                    {% if linkedin %}<br>🔗 {{ linkedin }}{% endif %}
+                    {% if github_portfolio %}<br>💻 {{ github_portfolio }}{% endif %}
+                </div>
+
+                {% if hard_skills or soft_skills %}
+                <div class="sidebar-title">KEAHLIAN</div>
+                <div class="sidebar-text">
+                    {% if hard_skills %}<b>Hard Skills:</b><br>{{ hard_skills }}<br><br>{% endif %}
+                    {% if soft_skills %}<b>Soft Skills:</b><br>{{ soft_skills }}{% endif %}
+                </div>
+                {% endif %}
+
+                {% if bahasa %}
+                <div class="sidebar-title">BAHASA</div>
+                <div class="sidebar-text">{{ bahasa }}</div>
+                {% endif %}
+            </td>
+            
+            <td class="right-col">
+                <div class="name-main">{{ nama }}</div>
+                {% if posisi_target %}<div class="title-main">{{ posisi_target }}</div>{% endif %}
+
+                {% if ringkasan %}
+                <div class="section-title-main">PROFIL PROFESIONAL</div>
+                <div class="desc">{{ ringkasan }}</div>
+                {% endif %}
+
+                {% if pengalaman and pengalaman[0].perusahaan %}
+                <div class="section-title-main">PENGALAMAN KERJA</div>
+                {% for exp in pengalaman %}{% if exp.perusahaan %}
+                    <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
+                    <div class="item-sub">{{ exp.perusahaan }}</div>
+                    <div class="desc">{{ exp.deskripsi }}</div>
+                {% endif %}{% endfor %}{% endif %}
+
+                {% if pendidikan and pendidikan[0].institusi %}
+                <div class="section-title-main">PENDIDIKAN</div>
+                {% for edu in pendidikan %}{% if edu.institusi %}
+                    <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
+                    <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+                {% endif %}{% endfor %}{% endif %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+"""
+
+# --- TEMPLATE 8: NORDIC MINIMALIST ---
+NORDIC_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: A4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #27272a !important; 
+        font-family: {{ font_family }}; font-size: 9pt; line-height: 1.45;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 14mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .header-nordic { text-align: center; margin-bottom: 16pt; padding-bottom: 12pt; border-bottom: 1pt solid #e4e4e7; }
+    .profile-img-nordic {
+        width: 75px; height: 75px; border-radius: 50%;
+        margin-bottom: 8pt; object-fit: cover;
+    }
+    .name { font-size: 22pt; font-weight: 300; letter-spacing: 3pt; color: #09090b; text-transform: uppercase; }
+    .title { font-size: 9.5pt; font-weight: 600; letter-spacing: 2pt; color: {{ accent_color }}; text-transform: uppercase; margin-top: 4pt; }
+    .contact { font-size: 8pt; color: #71717a; margin-top: 6pt; letter-spacing: 0.5pt; }
+    
+    .section-title { 
+        font-size: 9.5pt; font-weight: 700; color: {{ accent_color }}; text-transform: uppercase; 
+        letter-spacing: 2pt; margin-top: 14pt; margin-bottom: 8pt;
+    }
+    .item-header { font-weight: 600; font-size: 9.5pt; color: #09090b; margin-top: 5pt; }
+    .item-sub { font-weight: 500; font-size: 8.5pt; color: #52525b; font-style: italic; }
+    .right-text { float: right; color: #a1a1aa; font-weight: 400; font-style: normal; }
+    .desc { margin-top: 3pt; margin-bottom: 8pt; white-space: pre-line; color: #3f3f46; font-size: 8.5pt; }
+    .divider { height: 1pt; background-color: #f4f4f5; margin: 8pt 0; }
+</style>
+</head>
+<body>
+    <div class="header-nordic">
+        {% if foto_base64 %}
+            <img src="{{ foto_base64 }}" class="profile-img-nordic" /><br>
+        {% endif %}
+        <div class="name">{{ nama }}</div>
+        {% if posisi_target %}<div class="title">{{ posisi_target }}</div>{% endif %}
+        <div class="contact">
+            {{ lokasi }} &nbsp;|&nbsp; {{ email }} &nbsp;|&nbsp; {{ telepon }}
+            {% if linkedin %}&nbsp;|&nbsp; {{ linkedin }}{% endif %}
+            {% if github_portfolio %}&nbsp;|&nbsp; {{ github_portfolio }}{% endif %}
+        </div>
+    </div>
+
+    {% if ringkasan %}
+    <div class="section-title">PROFIL</div>
+    <div class="desc">{{ ringkasan }}</div>
+    <div class="divider"></div>
+    {% endif %}
+
+    {% if pengalaman and pengalaman[0].perusahaan %}
+    <div class="section-title">PENGALAMAN</div>
+    {% for exp in pengalaman %}{% if exp.perusahaan %}
+        <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
+        <div class="item-sub">{{ exp.perusahaan }}</div>
+        <div class="desc">{{ exp.deskripsi }}</div>
+    {% endif %}{% endfor %}
+    <div class="divider"></div>
+    {% endif %}
+
+    {% if pendidikan and pendidikan[0].institusi %}
+    <div class="section-title">PENDIDIKAN</div>
+    {% for edu in pendidikan %}{% if edu.institusi %}
+        <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+    {% endif %}{% endfor %}
+    <div class="divider"></div>
+    {% endif %}
+
+    {% if hard_skills or soft_skills or bahasa %}
+    <div class="section-title">KEAHLIAN & BAHASA</div>
+    <div class="desc">
+        {% if hard_skills %}<b>Hard Skills:</b> {{ hard_skills }}<br>{% endif %}
+        {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
+        {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
+"""
+
+# --- TEMPLATE 9: TECH DEVELOPER ---
+TECH_MONO_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: A4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #0f172a !important; 
+        font-family: {{ font_family }}; font-size: 9pt; line-height: 1.4;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .top-header {
+        border: 1pt solid #e2e8f0;
+        border-top: 4pt solid {{ accent_color }};
+        padding: 12pt;
+        background: #f8fafc;
+        border-radius: 4px;
+        margin-bottom: 12pt;
+    }
+    .header-table { width: 100%; border-collapse: collapse; }
+    .profile-img-tech {
+        width: 80px; height: 80px; border-radius: 6px;
+        border: 2pt solid {{ accent_color }}; object-fit: cover;
+    }
+    .name { font-size: 20pt; font-weight: 800; color: #0f172a; letter-spacing: -0.5pt; }
+    .title { font-size: 10pt; font-weight: 700; color: {{ accent_color }}; font-family: monospace; margin-top: 2pt; }
+    .contact { font-size: 8.5pt; color: #475569; margin-top: 5pt; }
+    
+    .section-title { 
+        font-size: 10pt; font-weight: 700; color: {{ accent_color }}; text-transform: uppercase; 
+        background: #f1f5f9; padding: 3pt 6pt; border-radius: 3px; margin-top: 12pt; margin-bottom: 6pt;
+        display: inline-block; font-family: monospace;
+    }
+    .item-card {
+        border-left: 2pt solid {{ accent_color }};
+        padding-left: 8pt;
+        margin-bottom: 8pt;
+    }
+    .item-header { font-weight: 700; font-size: 9.5pt; color: #0f172a; }
+    .item-sub { font-weight: 600; font-size: 8.5pt; color: #475569; }
+    .right-text { float: right; color: #64748b; font-size: 8pt; font-family: monospace; }
+    .desc { margin-top: 3pt; white-space: pre-line; color: #334155; font-size: 8.5pt; }
+    
+    .tech-badge {
+        background-color: #f1f5f9; border: 1pt solid #cbd5e1;
+        padding: 2pt 5pt; border-radius: 3px; font-family: monospace; font-size: 8pt; color: #0f172a;
+    }
+</style>
+</head>
+<body>
+    <div class="top-header">
+        <table class="header-table">
+            <tr>
+                {% if foto_base64 %}
+                <td width="18%" valign="middle" align="center">
+                    <img src="{{ foto_base64 }}" class="profile-img-tech" />
+                </td>
+                {% endif %}
+                <td valign="middle">
+                    <div class="name">{{ nama }}</div>
+                    {% if posisi_target %}<div class="title">&lt; {{ posisi_target }} /&gt;</div>{% endif %}
+                    <div class="contact">
+                        📍 {{ lokasi }} &nbsp;|&nbsp; ✉️ {{ email }} &nbsp;|&nbsp; 📞 {{ telepon }}
+                        {% if linkedin %}<br>🔗 {{ linkedin }}{% endif %} {% if github_portfolio %}&nbsp;|&nbsp; 💻 {{ github_portfolio }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {% if ringkasan %}
+    <div class="section-title">// PROFIL</div>
+    <div class="desc" style="margin-bottom: 10pt;">{{ ringkasan }}</div>
+    {% endif %}
+
+    {% if pengalaman and pengalaman[0].perusahaan %}
+    <div class="section-title">// PENGALAMAN KERJA</div>
+    {% for exp in pengalaman %}{% if exp.perusahaan %}
+        <div class="item-card">
+            <div class="item-header">{{ exp.posisi }} <span class="right-text">[{{ exp.periode }}]</span></div>
+            <div class="item-sub">@ {{ exp.perusahaan }}</div>
+            <div class="desc">{{ exp.deskripsi }}</div>
+        </div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if pendidikan and pendidikan[0].institusi %}
+    <div class="section-title">// PENDIDIKAN</div>
+    {% for edu in pendidikan %}{% if edu.institusi %}
+        <div class="item-card">
+            <div class="item-header">{{ edu.institusi }} <span class="right-text">[{{ edu.tahun }}]</span></div>
+            <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+        </div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if hard_skills or soft_skills or bahasa %}
+    <div class="section-title">// KEAHLIAN & BAHASA</div>
+    <div class="desc">
+        {% if hard_skills %}<p style="margin-bottom: 4pt;"><b>Hard Skills:</b> <span class="tech-badge">{{ hard_skills }}</span></p>{% endif %}
+        {% if soft_skills %}<p style="margin-bottom: 4pt;"><b>Soft Skills:</b> {{ soft_skills }}</p>{% endif %}
+        {% if bahasa %}<p><b>Bahasa:</b> {{ bahasa }}</p>{% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
+"""
+
+# --- TEMPLATE 10: BOLD EXECUTIVE IMPACT ---
+BOLD_IMPACT_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    @page { size: A4 portrait; margin: 12mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #2b2b2b; padding: 15px; }
+    body { 
+        background-color: #ffffff !important; color: #111827 !important; 
+        font-family: {{ font_family }}; font-size: 9.5pt; line-height: 1.4;
+        width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .header-bold {
+        background-color: #111827;
+        color: #ffffff;
+        padding: 16pt;
+        border-bottom: 5pt solid {{ accent_color }};
+        margin-bottom: 12pt;
+    }
+    .header-table { width: 100%; border-collapse: collapse; }
+    .profile-img-bold {
+        width: 85px; height: 85px; border-radius: 8px;
+        border: 2pt solid {{ accent_color }}; object-fit: cover;
+    }
+    .name { font-size: 24pt; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 1pt; }
+    .title { font-size: 11pt; font-weight: 700; color: {{ accent_color }}; text-transform: uppercase; margin-top: 2pt; letter-spacing: 1pt; }
+    .contact { font-size: 8.5pt; color: #d1d5db; margin-top: 6pt; }
+    
+    .section-title { 
+        font-size: 11pt; font-weight: 900; color: #111827; text-transform: uppercase; 
+        border-bottom: 2pt solid #111827; margin-top: 14pt; margin-bottom: 8pt; padding-bottom: 2pt;
+        letter-spacing: 0.5pt;
+    }
+    .item-header { font-weight: 800; font-size: 10pt; color: #111827; margin-top: 5pt; }
+    .item-sub { font-weight: 700; font-size: 8.5pt; color: {{ accent_color }}; }
+    .right-text { float: right; color: #4b5563; font-weight: bold; background: #f3f4f6; padding: 1pt 5pt; border-radius: 3px; }
+    .desc { margin-top: 3pt; margin-bottom: 6pt; white-space: pre-line; color: #374151; font-size: 8.5pt; }
+</style>
+</head>
+<body>
+    <div class="header-bold">
+        <table class="header-table">
+            <tr>
+                {% if foto_base64 %}
+                <td width="20%" valign="middle" align="center">
+                    <img src="{{ foto_base64 }}" class="profile-img-bold" />
+                </td>
+                {% endif %}
+                <td valign="middle">
+                    <div class="name">{{ nama }}</div>
+                    {% if posisi_target %}<div class="title">{{ posisi_target }}</div>{% endif %}
+                    <div class="contact">
+                        📍 {{ lokasi }} &nbsp;•&nbsp; ✉️ {{ email }} &nbsp;•&nbsp; 📞 {{ telepon }}
+                        {% if linkedin %}<br>🔗 {{ linkedin }}{% endif %} {% if github_portfolio %}&nbsp;•&nbsp; 💻 {{ github_portfolio }}{% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {% if ringkasan %}
+    <div class="section-title">PROFIL PROFESIONAL</div>
+    <div class="desc">{{ ringkasan }}</div>
+    {% endif %}
+
+    {% if pengalaman and pengalaman[0].perusahaan %}
+    <div class="section-title">PENGALAMAN KERJA</div>
+    {% for exp in pengalaman %}{% if exp.perusahaan %}
+        <div class="item-header">{{ exp.posisi }} <span class="right-text">{{ exp.periode }}</span></div>
+        <div class="item-sub">{{ exp.perusahaan }}</div>
+        <div class="desc">{{ exp.deskripsi }}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if pendidikan and pendidikan[0].institusi %}
+    <div class="section-title">PENDIDIKAN</div>
+    {% for edu in pendidikan %}{% if edu.institusi %}
+        <div class="item-header">{{ edu.institusi }} <span class="right-text">{{ edu.tahun }}</span></div>
+        <div class="item-sub">{{ edu.jurusan }} {% if edu.nilai %}(IPK: {{ edu.nilai }}){% endif %}</div>
+    {% endif %}{% endfor %}{% endif %}
+
+    {% if hard_skills or soft_skills or bahasa %}
+    <div class="section-title">KEAHLIAN & BAHASA</div>
+    <div class="desc">
+        {% if hard_skills %}<b>Technical Skills:</b> {{ hard_skills }}<br>{% endif %}
+        {% if soft_skills %}<b>Soft Skills:</b> {{ soft_skills }}<br>{% endif %}
+        {% if bahasa %}<b>Bahasa:</b> {{ bahasa }}{% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
+"""
+
 # --- TEMPLATE 5: ELEGANT CLASSIC ---
 ELEGANT_HTML = """
 <!DOCTYPE html>
@@ -478,9 +977,19 @@ with st.sidebar:
     st.header("🎨 Pengaturan Template")
     selected_template = st.selectbox(
         "Pilih Gaya CV", 
-        ["ATS Clean (ATS-Friendly)", "Modern Executive", "Creative Two-Column", "Minimalist Compact", "Elegant Classic"]
+        [
+            "ATS Clean (ATS-Friendly)", 
+            "Modern Executive", 
+            "Creative Two-Column", 
+            "Minimalist Compact", 
+            "Elegant Classic",
+            "Corporate Professional",
+            "Creative Split Sidebar",
+            "Nordic Minimalist",
+            "Tech Developer",
+            "Bold Executive"
+        ]
     )
-    
     font_label = st.selectbox("Font Family", list(FONT_MAPPING.keys()))
     selected_css_font = FONT_MAPPING[font_label]["css"]
     selected_pdf_font = FONT_MAPPING[font_label]["pdf"]
@@ -549,12 +1058,22 @@ with tab_input:
 with tab_preview:
     if "ATS" in selected_template:
         raw_template = ATS_HTML
-    elif "Modern" in selected_template:
+    elif "Modern Executive" in selected_template:
         raw_template = MODERN_HTML
-    elif "Creative" in selected_template:
+    elif "Creative Two-Column" in selected_template:
         raw_template = CREATIVE_HTML
     elif "Elegant" in selected_template:
         raw_template = ELEGANT_HTML
+    elif "Corporate" in selected_template:
+        raw_template = CORPORATE_HTML
+    elif "Split" in selected_template:
+        raw_template = CREATIVE_SPLIT_HTML
+    elif "Nordic" in selected_template:
+        raw_template = NORDIC_HTML
+    elif "Tech" in selected_template:
+        raw_template = TECH_MONO_HTML
+    elif "Bold" in selected_template:
+        raw_template = BOLD_IMPACT_HTML
     else:
         raw_template = MINIMAL_HTML
     
