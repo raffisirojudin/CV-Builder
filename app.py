@@ -110,7 +110,7 @@ with tab_proj_cert:
         st.rerun()
 
     st.markdown("---")
-    st.subheader("📜 Sertifikasi & Lisensi Profeisonal")
+    st.subheader("📜 Sertifikasi & Lisensi Profesional")
     
     for l, cert in enumerate(st.session_state.sertifikasi):
         with st.expander(f"Sertifikat #{l+1}: {cert['nama']}" if cert['nama'] else f"Sertifikat #{l+1}", expanded=True):
