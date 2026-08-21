@@ -3,10 +3,10 @@ from jinja2 import Template
 from xhtml2pdf import pisa
 import io
 
-st.set_page_config(page_title="AI & Modern CV Builder", layout="wide")
+st.set_page_config(page_title="AI & Dynamic CV Builder", layout="wide")
 
 # ==========================================
-# 1. INISIALISASI SESSION STATE
+# 1. INISIALISASI SESSION STATE DATA
 # ==========================================
 if "pengalaman" not in st.session_state:
     st.session_state.pengalaman = [{"perusahaan": "PT Teknologi Nusantara", "posisi": "Software Engineer", "periode": "Jan 2022 - Sekarang", "deskripsi": "- Mengembangkan API menggunakan Python & FastAPI\n- Meningkatkan performa database sebesar 30%"}]
@@ -24,27 +24,47 @@ if "organisasi" not in st.session_state:
     st.session_state.organisasi = []
 
 # ==========================================
-# 2. TEMPLATE HTML & CSS (JINJA2)
+# 2. DICTIONARY MAPPING FONT
 # ==========================================
+FONT_MAPPING = {
+    "Arial (Clean Sans)": {
+        "css": "Arial, Helvetica, sans-serif",
+        "pdf": "Helvetica"
+    },
+    "Times New Roman (Serif)": {
+        "css": "'Times New Roman', Times, serif",
+        "pdf": "Times-Roman"
+    },
+    "Courier (Monospace)": {
+        "css": "'Courier New', Courier, monospace",
+        "pdf": "Courier"
+    },
+    "Georgia (Editorial Serif)": {
+        "css": "Georgia, 'Times New Roman', serif",
+        "pdf": "Times-Roman"
+    }
+}
 
-# TEMPLATE 1: ATS CLEAN (FIXED DARK MODE)
+# ==========================================
+# 3. TEMPLATE HTML & CSS (ATS & MODERN)
+# ==========================================
 ATS_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
 <style>
     @page { size: A4; margin: 0; }
-    html { background-color: #1e1e1e; padding: 20px; } /* Background luar iframe */
+    html { background-color: #1e1e1e; padding: 20px; }
     body { 
-        background-color: #ffffff !important; /* Paksa latar belakang putih */
-        color: #111111 !important; /* Warna teks gelap tegas */
-        font-family: {{ font_family }}, sans-serif; 
+        background-color: #ffffff !important; 
+        color: #111111 !important; 
+        font-family: {{ font_family }}; 
         font-size: 9.5pt; 
         line-height: 1.35;
         max-width: 750px;
         margin: 0 auto;
         padding: 40px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Efek kertas A4 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         border-radius: 2px;
     }
     .header { text-align: center; margin-bottom: 12px; }
@@ -115,6 +135,32 @@ ATS_HTML = """
     {% endfor %}
     {% endif %}
 
+    {% if proyek and proyek[0].nama %}
+    <div class="section-title">PROYEK TERKAIT</div>
+    {% for proj in proyek %}
+        {% if proj.nama %}
+        <div class="item-header">
+            {{ proj.nama }} {% if proj.peran %}- <i>{{ proj.peran }}</i>{% endif %}
+            {% if proj.link %}<span class="right-text">{{ proj.link }}</span>{% endif %}
+        </div>
+        {% if proj.tools %}<div class="item-sub">Tools: {{ proj.tools }}</div>{% endif %}
+        <div class="desc">{{ proj.deskripsi }}</div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if sertifikasi and sertifikasi[0].nama %}
+    <div class="section-title">SERTIFIKASI</div>
+    {% for cert in sertifikasi %}
+        {% if cert.nama %}
+        <div class="item-header">
+            {{ cert.nama }} - <span style="font-weight:normal;">{{ cert.penerbit }}</span>
+            <span class="right-text">{{ cert.tahun }}</span>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
     {% if hard_skills or soft_skills or bahasa %}
     <div class="section-title">KEAHLIAN & LAINNYA</div>
     <p style="margin-top: 3px; color: #222222;">
@@ -127,7 +173,6 @@ ATS_HTML = """
 </html>
 """
 
-# TEMPLATE 2: MODERN EXECUTIVE (FIXED DARK MODE)
 MODERN_HTML = """
 <!DOCTYPE html>
 <html>
@@ -138,7 +183,7 @@ MODERN_HTML = """
     body { 
         background-color: #ffffff !important; 
         color: #2d3748 !important; 
-        font-family: {{ font_family }}, sans-serif; 
+        font-family: {{ font_family }}; 
         font-size: 9.5pt; 
         line-height: 1.4;
         max-width: 750px;
@@ -215,6 +260,32 @@ MODERN_HTML = """
     {% endfor %}
     {% endif %}
 
+    {% if proyek and proyek[0].nama %}
+    <div class="section-title">PROYEK & PORTOFOLIO</div>
+    {% for proj in proyek %}
+        {% if proj.nama %}
+        <div class="item-header">
+            {{ proj.nama }} {% if proj.peran %}<span class="badge">{{ proj.peran }}</span>{% endif %}
+            {% if proj.link %}<span class="right-text">{{ proj.link }}</span>{% endif %}
+        </div>
+        {% if proj.tools %}<div class="item-sub" style="font-size:8.5pt; color:#718096;">Stack: {{ proj.tools }}</div>{% endif %}
+        <div class="desc">{{ proj.deskripsi }}</div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if sertifikasi and sertifikasi[0].nama %}
+    <div class="section-title">SERTIFIKASI PROFESIONAL</div>
+    {% for cert in sertifikasi %}
+        {% if cert.nama %}
+        <div class="item-header">
+            🏆 {{ cert.nama }} - <span style="font-weight:normal; color:#4a5568;">{{ cert.penerbit }}</span>
+            <span class="right-text">{{ cert.tahun }}</span>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+
     {% if hard_skills or soft_skills or bahasa %}
     <div class="section-title">KEAHLIAN & BAHASA</div>
     <p style="margin-top: 3px; color: #2d3748;">
@@ -228,7 +299,7 @@ MODERN_HTML = """
 """
 
 # ==========================================
-# 3. FUNGSI KONVERSI PDF
+# 4. FUNGSI GENERATE PDF
 # ==========================================
 def generate_pdf(html_content):
     pdf_buffer = io.BytesIO()
@@ -238,29 +309,30 @@ def generate_pdf(html_content):
     return pdf_buffer.getvalue()
 
 # ==========================================
-# 4. LAYOUT UTAMA APLIKASI
+# 5. LAYOUT UTAMA & SIDEBAR
 # ==========================================
 st.title("📄 AI & Dynamic CV Builder")
 
-# Sidebar untuk Pengaturan Desain & Download
 with st.sidebar:
     st.header("🎨 Pengaturan Template")
     selected_template = st.selectbox("Pilih Gaya CV", ["ATS Clean (ATS-Friendly)", "Modern Executive"])
     
-    font_choice = st.selectbox("Font Family", ["Helvetica", "Arial", "Times-Roman", "Courier"])
+    font_label = st.selectbox("Font Family", list(FONT_MAPPING.keys()))
     
-    accent_color = "#1E3A8A" # default blue
+    selected_css_font = FONT_MAPPING[font_label]["css"]
+    selected_pdf_font = FONT_MAPPING[font_label]["pdf"]
+
+    accent_color = "#1E3A8A"
     if selected_template == "Modern Executive":
         accent_color = st.color_picker("Warna Aksen", "#1E3A8A")
 
-# TAB SYSTEM
+# TABS INPUT & PREVIEW
 tab_input, tab_preview = st.tabs(["📝 1. Isi Data CV", "👁️ 2. Live Preview & Cetak PDF"])
 
 # --- TAB 1: FORM INPUT DATA ---
 with tab_input:
     st.info("Lengkapi data Anda di bawah ini. Perubahan akan langsung terupdate di Tab Preview.")
     
-    # Section Profil
     st.subheader("👤 Profil Utama")
     c1, c2 = st.columns(2)
     nama = c1.text_input("Nama Lengkap", "Budi Santoso, S.Kom.")
@@ -273,7 +345,6 @@ with tab_input:
     
     ringkasan = st.text_area("Ringkasan Profil", "Software Engineer dengan pengalaman 3+ tahun dalam merancang dan mengembangkan aplikasi web skala besar. Ahli dalam Python, REST API, dan arsitektur microservices.")
 
-    # Section Pengalaman
     st.markdown("---")
     st.subheader("💼 Pengalaman Kerja")
     for i, exp in enumerate(st.session_state.pengalaman):
@@ -287,7 +358,6 @@ with tab_input:
         st.session_state.pengalaman.append({"perusahaan": "", "posisi": "", "periode": "", "deskripsi": ""})
         st.rerun()
 
-    # Section Pendidikan
     st.markdown("---")
     st.subheader("🎓 Pendidikan")
     for j, edu in enumerate(st.session_state.pendidikan):
@@ -301,21 +371,33 @@ with tab_input:
         st.session_state.pendidikan.append({"institusi": "", "jurusan": "", "tahun": "", "nilai": ""})
         st.rerun()
 
-    # Section Skills
     st.markdown("---")
-    st.subheader("⚡ Keahlian")
+    st.subheader("📌 Proyek & Sertifikasi")
+    for k, proj in enumerate(st.session_state.proyek):
+        with st.expander(f"Proyek #{k+1}: {proj['nama']}", expanded=False):
+            proj["nama"] = st.text_input("Nama Proyek", proj["nama"], key=f"pjname_{k}")
+            proj["peran"] = st.text_input("Peran", proj["peran"], key=f"pjrole_{k}")
+            proj["tools"] = st.text_input("Tools/Stack", proj["tools"], key=f"pjtools_{k}")
+            proj["link"] = st.text_input("Link Proyek", proj["link"], key=f"pjlink_{k}")
+            proj["deskripsi"] = st.text_area("Deskripsi Proyek", proj["deskripsi"], key=f"pjdesc_{k}")
+
+    if st.button("➕ Tambah Proyek"):
+        st.session_state.proyek.append({"nama": "", "peran": "", "tools": "", "link": "", "deskripsi": ""})
+        st.rerun()
+
+    st.markdown("---")
+    st.subheader("⚡ Keahlian & Lainnya")
     sk1, sk2 = st.columns(2)
     hard_skills = sk1.text_area("Hard Skills", "Python, SQL, FastApi, Docker, Git, PostgreSQL")
     soft_skills = sk2.text_area("Soft Skills", "Problem Solving, Team Leadership, Communication")
     bahasa = st.text_input("Bahasa", "Indonesia (Native), Inggris (Professional)")
 
-# --- TAB 2: LIVE PREVIEW & RENDER ---
+# --- TAB 2: LIVE PREVIEW & DOWNLOAD ---
 with tab_preview:
-    # 1. Pilih Template String
     raw_template = ATS_HTML if "ATS" in selected_template else MODERN_HTML
     
-    # 2. Render Template dengan Jinja2
-    rendered_html = Template(raw_template).render(
+    # Render untuk Tampilan Web (Preview)
+    rendered_html_preview = Template(raw_template).render(
         nama=nama,
         posisi_target=posisi_target,
         email=email,
@@ -331,7 +413,28 @@ with tab_preview:
         hard_skills=hard_skills,
         soft_skills=soft_skills,
         bahasa=bahasa,
-        font_family=font_choice,
+        font_family=selected_css_font,
+        accent_color=accent_color
+    )
+
+    # Render untuk Ekspor PDF Engine
+    rendered_html_pdf = Template(raw_template).render(
+        nama=nama,
+        posisi_target=posisi_target,
+        email=email,
+        telepon=telepon,
+        lokasi=lokasi,
+        linkedin=linkedin,
+        github_portfolio=github_portfolio,
+        ringkasan=ringkasan,
+        pengalaman=st.session_state.pengalaman,
+        pendidikan=st.session_state.pendidikan,
+        proyek=st.session_state.proyek,
+        sertifikasi=st.session_state.sertifikasi,
+        hard_skills=hard_skills,
+        soft_skills=soft_skills,
+        bahasa=bahasa,
+        font_family=selected_pdf_font,
         accent_color=accent_color
     )
 
@@ -339,15 +442,13 @@ with tab_preview:
 
     with col_preview:
         st.subheader("Visual Preview")
-        # Render HTML langsung di iframe Streamlit
-        st.components.v1.html(rendered_html, height=800, scrolling=True)
+        st.components.v1.html(rendered_html_preview, height=800, scrolling=True)
 
     with col_download:
         st.subheader("📥 Export File")
-        st.write("Klik tombol di bawah untuk mengunduh CV dalam format PDF siap pakai.")
+        st.write("Klik tombol di bawah untuk mengunduh CV.")
         
-        # Generasi File PDF Buffer
-        pdf_bytes = generate_pdf(rendered_html)
+        pdf_bytes = generate_pdf(rendered_html_pdf)
         
         if pdf_bytes:
             st.download_button(
@@ -358,4 +459,4 @@ with tab_preview:
                 use_container_width=True
             )
         else:
-            st.error("Gagal mendesain PDF. Pastikan format penulisan HTML valid.")
+            st.error("Gagal mendesain PDF.")
